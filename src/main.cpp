@@ -9,6 +9,7 @@
 #include "Views/EditView.h"
 #include "Views/MainView.h"
 #include "Views/TimerView.h"
+#include "Views/FinishView.h"
 
 #define TOUCH_THRESHOLD 1500
 
@@ -36,6 +37,7 @@ ulong countdownStartValueMs = 25 * 60 * 1000;
 EditView editView(display, touch, countdownStartValueMs, deviceState, lastTickMs);
 MainView mainView(display, touch, countdownStartValueMs, countdownStartTickMs, deviceState, lastTickMs);
 TimerView timerView(display, touch, countdownStartValueMs, countdownStartTickMs, deviceState, lastTickMs);
+FinishView finishView(display, touch, deviceState, lastTickMs);
 
 void triggerTouchLeft() {
     touch.left.trigger();
@@ -79,26 +81,27 @@ void setup() {
     countdownStartTickMs = lastTickMs;
 }
 
-void finishView() {
-    //Handle input
-    if (touch.select.takeActionIfPossible()) {
-        deviceState = state::ready;
+View* getCurrentView() {
+    switch (deviceState) {
+        case state::editMinutes:
+        case state::editSeconds:
+            return &editView;
+
+        case state::ready:
+            return &mainView;
+
+        case state::counting:
+            return &timerView;
+
+        case state::finish:
+            return &finishView;
     }
+}
 
-    //Handle view
-    bool showDigits = (lastTickMs / 500) % 2 == 0;
-    String text = "00:00";
-
+void touchDebugOverlay() {
     display.setFont();
-    display.setCursor(0, 9);
-    display.print("Time to take a break!");
-
-    display.setFont(&FreeMonoBold18pt7b);
-    display.setCursor(12, 44);
-
-    if (showDigits) {
-        display.print(text);
-    }
+    display.setCursor(0, 56);
+    display.print(touch.getTouchDebugValue());
 }
 
 void loop() {
@@ -106,33 +109,13 @@ void loop() {
 
     touch.updateState();
 
-    display.clearDisplay();
-
-    switch (deviceState) {
-        case state::editSeconds:
-        case state::editMinutes:
-            editView.handleInput();
-            editView.render();
-            break;
-
-        case state::ready:
-            mainView.handleInput();
-            mainView.render();
-            break;
-
-        case state::counting:
-            timerView.handleInput();
-            timerView.render();
-            break;
-
-        case state::finish:
-            finishView();
-            break;
+    View* currentView = getCurrentView();
+    if (currentView) {
+        currentView->handleInput();
+        currentView->render();
     }
 
-    display.setFont();
-    display.setCursor(0, 56);
-    display.print(touch.getTouchDebugValue());
+    touchDebugOverlay();
 
     display.display();
 

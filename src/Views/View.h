@@ -15,7 +15,7 @@ public:
             : display(display), touch(touch) {}
 
     virtual void handleInput() = 0; // To be implemented by derived classes
-    virtual void render() = 0;      // To be implemented by derived classes
+    virtual void render();
 
     virtual ~View() = default;
 };

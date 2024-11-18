@@ -8,6 +8,8 @@ void TimerView::handleInput() {
 }
 
 void TimerView::render() {
+    View::render();
+
     ulong countdownValue = countdownStartTickMs + countdownStartValueMs - lastTickMs;
 
     // React to overflow

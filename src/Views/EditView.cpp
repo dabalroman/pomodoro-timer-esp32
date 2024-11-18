@@ -38,6 +38,8 @@ void EditView::handleInput() {
 }
 
 void EditView::render() {
+    View::render();
+
     bool showDigit = (lastTickMs / 300) % 2 == 0;
     String text = "";
 

@@ -13,6 +13,8 @@ void MainView::handleInput() {
 }
 
 void MainView::render() {
+    View::render();
+
     String text = Formatter::formatTime(countdownStartValueMs);
 
     display.setFont();
