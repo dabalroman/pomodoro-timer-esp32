@@ -15,7 +15,7 @@ Remember to select the correct COM port in `platformio.ini` to before trying to 
 
 Kicad project is available in `esp-pomodoro-clock` directory.
 
-![](assets\scheme.png)
+![](assets/scheme.png)
 
 
 # Software

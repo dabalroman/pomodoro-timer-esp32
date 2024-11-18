@@ -7,6 +7,7 @@
 #include "../lib/Formatter.h"
 #include "DeviceState.h"
 #include "Views/EditView.h"
+#include "Views/MainView.h"
 
 #define TOUCH_THRESHOLD 1500
 
@@ -32,6 +33,7 @@ ulong countdownStartTickMs = 0;
 ulong countdownStartValueMs = 25 * 60 * 1000;
 
 EditView editView(display, touch, countdownStartValueMs, deviceState, lastTickMs);
+MainView mainView(display, touch, countdownStartValueMs, countdownStartTickMs, deviceState, lastTickMs);
 
 void triggerTouchLeft() {
     touch.left.trigger();
@@ -73,29 +75,6 @@ void setup() {
     lastTickMs = millis();
     startupTickMs = lastTickMs;
     countdownStartTickMs = lastTickMs;
-}
-
-void readyView() {
-    //Handle input
-    if (touch.right.takeActionIfPossible()) {
-        deviceState = state::editMinutes;
-    }
-
-    if (touch.select.takeActionIfPossible()) {
-        deviceState = state::counting;
-        countdownStartTickMs = lastTickMs;
-    }
-
-    //Handle view
-    String text = Formatter::formatTime(countdownStartValueMs);
-
-    display.setFont();
-    display.setCursor(49, 9);
-    display.print("Ready");
-
-    display.setFont(&FreeMonoBold18pt7b);
-    display.setCursor(12, 44);
-    display.print(text);
 }
 
 void countingView() {
@@ -161,7 +140,8 @@ void loop() {
             break;
 
         case state::ready:
-            readyView();
+            mainView.handleInput();
+            mainView.render();
             break;
 
         case state::counting:
