@@ -2,7 +2,7 @@
 #include <Fonts/FreeMonoBold18pt7b.h>
 
 void FinishView::handleInput() {
-    if (touch.select.takeActionIfPossible()) {
+    if (touch.selectButton.takeActionIfPossible()) {
         deviceState = state::ready;
     }
 }

@@ -2,15 +2,16 @@
 #include <Fonts/FreeMonoBold18pt7b.h>
 
 void EditView::handleInput() {
-    if (touch.select.takeActionIfPossible()) {
+    if (touch.selectButton.takeActionIfPossible()) {
         if (deviceState == state::editMinutes) {
             deviceState = state::editSeconds;
         } else if (deviceState == state::editSeconds) {
+            preferencesManager.saveCountdownStartValueMs(countdownStartValueMs);
             deviceState = state::ready;
         }
     }
 
-    if (touch.right.isTouched()) {
+    if (touch.rightButton.isTouched()) {
         if (deviceState == state::editMinutes) {
             countdownStartValueMs += 60 * 1000;
         } else if (deviceState == state::editSeconds) {
@@ -23,7 +24,7 @@ void EditView::handleInput() {
         }
     }
 
-    if (touch.left.isTouched()) {
+    if (touch.leftButton.isTouched()) {
         if (deviceState == state::editMinutes) {
             countdownStartValueMs -= 60 * 1000;
         } else if (deviceState == state::editSeconds) {

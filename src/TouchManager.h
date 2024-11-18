@@ -10,21 +10,24 @@
 
 class TouchManager {
 public:
-    Touch left = Touch(GPIO_TOUCH_L);
-    Touch select = Touch(GPIO_TOUCH_S);
-    Touch right = Touch(GPIO_TOUCH_R);
+    Touch leftButton = Touch(GPIO_TOUCH_L);
+    Touch selectButton = Touch(GPIO_TOUCH_S);
+    Touch rightButton = Touch(GPIO_TOUCH_R);
 
     String getTouchDebugValue() const {
         return String()
-                + "L" + (this->left.isTouched() ? "_" : "-") + (this->left.canTakeAction() ? "O" : "X")
-                + "      S" + (this->select.isTouched() ? "_" : "-") + (this->select.canTakeAction() ? "O" : "X")
-                + "      R" + (this->right.isTouched() ? "_" : "-") + (this->right.canTakeAction() ? "O" : "X");
+               + "L" + (this->leftButton.isTouched() ? "_" : "-")
+               + (this->leftButton.canTakeAction() ? "O" : "X")
+               + "      S" + (this->selectButton.isTouched() ? "_" : "-")
+               + (this->selectButton.canTakeAction() ? "O" : "X")
+               + "      R" + (this->rightButton.isTouched() ? "_" : "-")
+               + (this->rightButton.canTakeAction() ? "O" : "X");
     }
 
     void updateState() {
-        this->left.updateState();
-        this->select.updateState();
-        this->right.updateState();
+        this->leftButton.updateState();
+        this->selectButton.updateState();
+        this->rightButton.updateState();
     }
 };
 

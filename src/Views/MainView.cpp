@@ -2,11 +2,11 @@
 #include <Fonts/FreeMonoBold18pt7b.h>
 
 void MainView::handleInput() {
-    if (touch.right.takeActionIfPossible()) {
+    if (touch.rightButton.takeActionIfPossible()) {
         deviceState = state::editMinutes;
     }
 
-    if (touch.select.takeActionIfPossible()) {
+    if (touch.selectButton.takeActionIfPossible()) {
         deviceState = state::counting;
         countdownStartTickMs = lastTickMs;
     }

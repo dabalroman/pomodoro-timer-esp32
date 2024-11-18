@@ -1,15 +1,16 @@
-#include <Arduino.h>
-#include <Wire.h>
-#include <Adafruit_SSD1306.h>
-#include <FastLED.h>
-#include <Fonts/FreeMonoBold18pt7b.h>
-#include "TouchManager.h"
 #include "../lib/Formatter.h"
 #include "DeviceState.h"
+#include "PreferencesManager.h"
+#include "TouchManager.h"
 #include "Views/EditView.h"
+#include "Views/FinishView.h"
 #include "Views/MainView.h"
 #include "Views/TimerView.h"
-#include "Views/FinishView.h"
+#include <Adafruit_SSD1306.h>
+#include <Arduino.h>
+#include <FastLED.h>
+#include <Fonts/FreeMonoBold18pt7b.h>
+#include <Wire.h>
 
 #define TOUCH_THRESHOLD 1500
 
@@ -23,37 +24,37 @@
 #define SCREEN_HEIGHT 64
 
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);
-
 CRGB ledArray[2];
 
 TouchManager touch;
+PreferencesManager preferencesManager;
 
 state deviceState = ready;
 ulong lastTickMs = 0;
-ulong startupTickMs = 0;
 ulong countdownStartTickMs = 0;
 ulong countdownStartValueMs = 25 * 60 * 1000;
 
-EditView editView(display, touch, countdownStartValueMs, deviceState, lastTickMs);
+EditView editView(display, touch, preferencesManager, countdownStartValueMs, deviceState, lastTickMs);
 MainView mainView(display, touch, countdownStartValueMs, countdownStartTickMs, deviceState, lastTickMs);
 TimerView timerView(display, touch, countdownStartValueMs, countdownStartTickMs, deviceState, lastTickMs);
 FinishView finishView(display, touch, deviceState, lastTickMs);
 
 void triggerTouchLeft() {
-    touch.left.trigger();
+    touch.leftButton.trigger();
 }
 
 void triggerTouchSelect() {
-    touch.select.trigger();
+    touch.selectButton.trigger();
 }
 
 void triggerTouchRight() {
-    touch.right.trigger();
+    touch.rightButton.trigger();
 }
 
 void setup() {
     Serial.begin(115200);
 
+    // Setup leds
     FastLED.addLeds<LED_TYPE, LED_GPIO, LED_COLOR_ORDER>(ledArray, LED_AMOUNT)
             .setCorrection(TypicalLEDStrip);
     FastLED.setBrightness(LED_BRIGHTNESS);
@@ -61,6 +62,7 @@ void setup() {
     ledArray[1].setRGB(random(255), random(255), random(255));
     FastLED.show();
 
+    // Setup display
     if (!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
         Serial.println(F("SSD1306 allocation failed"));
         for (;;);
@@ -68,20 +70,23 @@ void setup() {
 
     delay(2000);
     display.clearDisplay();
-
     display.setFont(&FreeMonoBold18pt7b);
     display.setTextColor(WHITE);
 
-    touchAttachInterrupt(touch.left.getGPIO(), triggerTouchLeft, TOUCH_THRESHOLD);
-    touchAttachInterrupt(touch.select.getGPIO(), triggerTouchSelect, TOUCH_THRESHOLD);
-    touchAttachInterrupt(touch.right.getGPIO(), triggerTouchRight, TOUCH_THRESHOLD);
 
+    // Setup touch
+    touchAttachInterrupt(touch.leftButton.getGPIO(), triggerTouchLeft, TOUCH_THRESHOLD);
+    touchAttachInterrupt(touch.selectButton.getGPIO(), triggerTouchSelect, TOUCH_THRESHOLD);
+    touchAttachInterrupt(touch.rightButton.getGPIO(), triggerTouchRight, TOUCH_THRESHOLD);
+
+
+    // Setup environment
     lastTickMs = millis();
-    startupTickMs = lastTickMs;
     countdownStartTickMs = lastTickMs;
+    countdownStartValueMs = preferencesManager.getCountdownStartValueMs(25 * 60 * 1000);
 }
 
-View* getCurrentView() {
+View *getCurrentView() {
     switch (deviceState) {
         case state::editMinutes:
         case state::editSeconds:
@@ -96,6 +101,8 @@ View* getCurrentView() {
         case state::finish:
             return &finishView;
     }
+
+    return &mainView;
 }
 
 void touchDebugOverlay() {
@@ -109,11 +116,9 @@ void loop() {
 
     touch.updateState();
 
-    View* currentView = getCurrentView();
-    if (currentView) {
-        currentView->handleInput();
-        currentView->render();
-    }
+    View *currentView = getCurrentView();
+    currentView->handleInput();
+    currentView->render();
 
     touchDebugOverlay();
 
