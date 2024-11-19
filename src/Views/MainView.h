@@ -7,18 +7,19 @@
 class MainView : public View {
     ulong &countdownStartValueMs;
     ulong &countdownStartTickMs;
-    state &deviceState;
+    DeviceState &deviceState;
     ulong &lastTickMs;
 
 public:
     MainView(
             Adafruit_SSD1306 &display,
             TouchManager &touch,
+            LEDManager &ledManager,
             ulong &countdownStartValueMs,
             ulong &countdownStartTickMs,
-            state &deviceState,
+            DeviceState &deviceState,
             ulong &lastTickMs
-    ) : View(display, touch),
+    ) : View(display, touch, ledManager),
         countdownStartValueMs(countdownStartValueMs),
         countdownStartTickMs(countdownStartTickMs),
         deviceState(deviceState),

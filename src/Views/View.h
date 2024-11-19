@@ -3,16 +3,18 @@
 
 #include <Adafruit_SSD1306.h>
 #include "TouchManager.h"
+#include "LEDManager/LEDManager.h"
 #include "../lib/Formatter.h"
 
 class View {
 protected:
     Adafruit_SSD1306 &display;
     TouchManager &touch;
+    LEDManager &ledManager;
 
 public:
-    View(Adafruit_SSD1306 &display, TouchManager &touch)
-            : display(display), touch(touch) {}
+    View(Adafruit_SSD1306 &display, TouchManager &touch, LEDManager &ledManager)
+            : display(display), touch(touch), ledManager(ledManager) {}
 
     virtual void handleInput() = 0; // To be implemented by derived classes
     virtual void render();

@@ -6,38 +6,32 @@
 #include "Views/FinishView.h"
 #include "Views/MainView.h"
 #include "Views/TimerView.h"
+#include "LEDManager/LEDManager.h"
 #include <Adafruit_SSD1306.h>
 #include <Arduino.h>
-#include <FastLED.h>
 #include <Fonts/FreeMonoBold18pt7b.h>
 #include <Wire.h>
 
 #define TOUCH_THRESHOLD 1500
 
-#define LED_GPIO 12
-#define LED_TYPE WS2811
-#define LED_COLOR_ORDER GRB
-#define LED_AMOUNT 2
-#define LED_BRIGHTNESS 32
-
 #define SCREEN_WIDTH 128
 #define SCREEN_HEIGHT 64
 
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);
-CRGB ledArray[2];
 
-TouchManager touch;
-PreferencesManager preferencesManager;
-
-state deviceState = ready;
 ulong lastTickMs = 0;
 ulong countdownStartTickMs = 0;
 ulong countdownStartValueMs = 25 * 60 * 1000;
 
-EditView editView(display, touch, preferencesManager, countdownStartValueMs, deviceState, lastTickMs);
-MainView mainView(display, touch, countdownStartValueMs, countdownStartTickMs, deviceState, lastTickMs);
-TimerView timerView(display, touch, countdownStartValueMs, countdownStartTickMs, deviceState, lastTickMs);
-FinishView finishView(display, touch, deviceState, lastTickMs);
+TouchManager touch;
+PreferencesManager preferencesManager;
+DeviceState deviceState= ready;
+LEDManager ledManager(lastTickMs);
+
+EditView editView(display, touch, ledManager, preferencesManager, countdownStartValueMs, deviceState, lastTickMs);
+MainView mainView(display, touch, ledManager, countdownStartValueMs, countdownStartTickMs, deviceState, lastTickMs);
+TimerView timerView(display, touch, ledManager, countdownStartValueMs, countdownStartTickMs, deviceState, lastTickMs);
+FinishView finishView(display, touch, ledManager, deviceState, lastTickMs);
 
 void triggerTouchLeft() {
     touch.leftButton.trigger();
@@ -54,13 +48,7 @@ void triggerTouchRight() {
 void setup() {
     Serial.begin(115200);
 
-    // Setup leds
-    FastLED.addLeds<LED_TYPE, LED_GPIO, LED_COLOR_ORDER>(ledArray, LED_AMOUNT)
-            .setCorrection(TypicalLEDStrip);
-    FastLED.setBrightness(LED_BRIGHTNESS);
-    ledArray[0].setRGB(random(255), random(255), random(255));
-    ledArray[1].setRGB(random(255), random(255), random(255));
-    FastLED.show();
+    ledManager.setup();
 
     // Setup display
     if (!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
@@ -88,17 +76,17 @@ void setup() {
 
 View *getCurrentView() {
     switch (deviceState) {
-        case state::editMinutes:
-        case state::editSeconds:
+        case DeviceState::editMinutes:
+        case DeviceState::editSeconds:
             return &editView;
 
-        case state::ready:
+        case DeviceState::ready:
             return &mainView;
 
-        case state::counting:
+        case DeviceState::counting:
             return &timerView;
 
-        case state::finish:
+        case DeviceState::finish:
             return &finishView;
     }
 
@@ -116,11 +104,17 @@ void loop() {
 
     touch.updateState();
 
+    if (touch.isTouched()) {
+        ledManager.showTouch(
+                touch.leftButton.isTouched(),
+                touch.selectButton.isTouched(),
+                touch.rightButton.isTouched()
+        );
+    }
+
     View *currentView = getCurrentView();
     currentView->handleInput();
     currentView->render();
-
-    touchDebugOverlay();
 
     display.display();
 

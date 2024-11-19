@@ -3,18 +3,18 @@
 
 void EditView::handleInput() {
     if (touch.selectButton.takeActionIfPossible()) {
-        if (deviceState == state::editMinutes) {
-            deviceState = state::editSeconds;
-        } else if (deviceState == state::editSeconds) {
+        if (deviceState == DeviceState::editMinutes) {
+            deviceState = DeviceState::editSeconds;
+        } else if (deviceState == DeviceState::editSeconds) {
             preferencesManager.saveCountdownStartValueMs(countdownStartValueMs);
-            deviceState = state::ready;
+            deviceState = DeviceState::ready;
         }
     }
 
     if (touch.rightButton.isTouched()) {
-        if (deviceState == state::editMinutes) {
+        if (deviceState == DeviceState::editMinutes) {
             countdownStartValueMs += 60 * 1000;
-        } else if (deviceState == state::editSeconds) {
+        } else if (deviceState == DeviceState::editSeconds) {
             countdownStartValueMs += 1000;
         }
 
@@ -25,9 +25,9 @@ void EditView::handleInput() {
     }
 
     if (touch.leftButton.isTouched()) {
-        if (deviceState == state::editMinutes) {
+        if (deviceState == DeviceState::editMinutes) {
             countdownStartValueMs -= 60 * 1000;
-        } else if (deviceState == state::editSeconds) {
+        } else if (deviceState == DeviceState::editSeconds) {
             countdownStartValueMs -= 1000;
         }
 
@@ -39,6 +39,8 @@ void EditView::handleInput() {
 }
 
 void EditView::render() {
+    ledManager.off();
+
     View::render();
 
     bool showDigit = (lastTickMs / 300) % 2 == 0;

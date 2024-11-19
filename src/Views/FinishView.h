@@ -5,16 +5,17 @@
 #include "DeviceState.h"
 
 class FinishView : public View {
-    state &deviceState;
+    DeviceState &deviceState;
     ulong &lastTickMs;
 
 public:
     FinishView(
             Adafruit_SSD1306 &display,
             TouchManager &touch,
-            state &deviceState,
+            LEDManager &ledManager,
+            DeviceState &deviceState,
             ulong &lastTickMs
-    ) : View(display, touch),
+    ) : View(display, touch, ledManager),
         deviceState(deviceState),
         lastTickMs(lastTickMs) {}
 

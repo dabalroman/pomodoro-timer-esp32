@@ -24,6 +24,10 @@ public:
                + (this->rightButton.canTakeAction() ? "O" : "X");
     }
 
+    bool isTouched() const {
+        return this->leftButton.isTouched() || this->selectButton.isTouched() || this->rightButton.isTouched();
+    }
+
     void updateState() {
         this->leftButton.updateState();
         this->selectButton.updateState();

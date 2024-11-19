@@ -3,16 +3,18 @@
 
 void MainView::handleInput() {
     if (touch.rightButton.takeActionIfPossible()) {
-        deviceState = state::editMinutes;
+        deviceState = DeviceState::editMinutes;
     }
 
     if (touch.selectButton.takeActionIfPossible()) {
-        deviceState = state::counting;
+        deviceState = DeviceState::counting;
         countdownStartTickMs = lastTickMs;
     }
 }
 
 void MainView::render() {
+    ledManager.off();
+
     View::render();
 
     String text = Formatter::formatTime(countdownStartValueMs);

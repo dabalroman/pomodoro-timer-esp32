@@ -3,11 +3,13 @@
 
 void FinishView::handleInput() {
     if (touch.selectButton.takeActionIfPossible()) {
-        deviceState = state::ready;
+        deviceState = DeviceState::ready;
     }
 }
 
 void FinishView::render() {
+    ledManager.animateAlarm();
+
     View::render();
 
     bool showDigits = (lastTickMs / 500) % 2 == 0;

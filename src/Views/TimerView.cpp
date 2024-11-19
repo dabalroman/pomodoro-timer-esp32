@@ -3,11 +3,13 @@
 
 void TimerView::handleInput() {
     if (touch.selectButton.takeActionIfPossible()) {
-        deviceState = state::ready;
+        deviceState = DeviceState::ready;
     }
 }
 
 void TimerView::render() {
+    ledManager.off();
+
     View::render();
 
     ulong countdownValue = countdownStartTickMs + countdownStartValueMs - lastTickMs;
@@ -15,7 +17,7 @@ void TimerView::render() {
     // React to overflow
     if (countdownValue >= 4000000000) {
         countdownValue = 0;
-        deviceState = state::finish;
+        deviceState = DeviceState::finish;
     }
 
     String text = Formatter::formatTime(countdownValue);

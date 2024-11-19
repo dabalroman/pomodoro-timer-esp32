@@ -8,18 +8,19 @@
 class EditView : public View {
     PreferencesManager &preferencesManager;
     ulong &countdownStartValueMs;
-    state &deviceState;
+    DeviceState &deviceState;
     ulong &lastTickMs;
 
 public:
     EditView(
             Adafruit_SSD1306 &display,
             TouchManager &touch,
+            LEDManager &ledManager,
             PreferencesManager &preferencesManager,
             ulong &countdownStartValueMs,
-            state &deviceState,
+            DeviceState &deviceState,
             ulong &lastTickMs
-    ) : View(display, touch),
+    ) : View(display, touch, ledManager),
         preferencesManager(preferencesManager),
         countdownStartValueMs(countdownStartValueMs),
         deviceState(deviceState),

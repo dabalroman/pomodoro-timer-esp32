@@ -1,7 +1,7 @@
 #ifndef ESP_POMODORO_CLOCK_DEVICESTATE_H
 #define ESP_POMODORO_CLOCK_DEVICESTATE_H
 
-enum state {
+enum DeviceState {
     ready,
     editMinutes,
     editSeconds,
