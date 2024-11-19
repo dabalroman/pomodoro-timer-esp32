@@ -2,7 +2,7 @@
 #define ESP_POMODORO_CLOCK_LEDMANAGERSTATE_H
 
 enum LEDManagerState {
-    alarm,
+    ringing,
     countingDown,
     idle,
     off,

@@ -8,7 +8,7 @@ void TimerView::handleInput() {
 }
 
 void TimerView::render() {
-    ledManager.off();
+    ledManager.setState(countingDown);
 
     View::render();
 

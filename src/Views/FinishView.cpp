@@ -8,7 +8,7 @@ void FinishView::handleInput() {
 }
 
 void FinishView::render() {
-    ledManager.animateAlarm();
+    ledManager.setState(LEDManagerState::ringing);
 
     View::render();
 

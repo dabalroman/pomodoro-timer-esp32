@@ -11,6 +11,8 @@ class EditView : public View {
     DeviceState &deviceState;
     ulong &lastTickMs;
 
+    bool hasEditBeenRendered = true;
+
 public:
     EditView(
             Adafruit_SSD1306 &display,

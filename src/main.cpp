@@ -22,6 +22,7 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);
 ulong lastTickMs = 0;
 ulong countdownStartTickMs = 0;
 ulong countdownStartValueMs = 25 * 60 * 1000;
+ulong lastScreenUpdate = 0;
 
 TouchManager touch;
 PreferencesManager preferencesManager;
@@ -102,21 +103,29 @@ void touchDebugOverlay() {
 void loop() {
     lastTickMs = millis();
 
-    touch.updateState();
+    touch.update();
 
-    if (touch.isTouched()) {
-        ledManager.showTouch(
-                touch.leftButton.isTouched(),
-                touch.selectButton.isTouched(),
-                touch.rightButton.isTouched()
-        );
+    // Touch feedback is the most important one, so let it override other values before render
+    if(touch.leftButton.isTouched()) {
+        ledManager.setState(LEDManagerState::touchLeft);
+    } else if(touch.selectButton.isTouched()) {
+        ledManager.setState(LEDManagerState::touchCenter);
+    } else if(touch.rightButton.isTouched()) {
+        ledManager.setState(LEDManagerState::touchRight);
     }
 
+    ledManager.update();
+
+    // Handle input with higher polling to get more tactile UX
     View *currentView = getCurrentView();
     currentView->handleInput();
-    currentView->render();
 
-    display.display();
+    if(lastTickMs - lastScreenUpdate >= 100) {
+        lastScreenUpdate = lastTickMs;
 
-    delay(100);
+        currentView->render();
+        display.display();
+    }
+
+    delay(20);
 }

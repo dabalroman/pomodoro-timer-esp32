@@ -13,7 +13,7 @@ void MainView::handleInput() {
 }
 
 void MainView::render() {
-    ledManager.off();
+    ledManager.setState(idle);
 
     View::render();
 

@@ -2,6 +2,10 @@
 #include <Fonts/FreeMonoBold18pt7b.h>
 
 void EditView::handleInput() {
+    if (!hasEditBeenRendered) {
+        return;
+    }
+
     if (touch.selectButton.takeActionIfPossible()) {
         if (deviceState == DeviceState::editMinutes) {
             deviceState = DeviceState::editSeconds;
@@ -15,7 +19,7 @@ void EditView::handleInput() {
         if (deviceState == DeviceState::editMinutes) {
             countdownStartValueMs += 60 * 1000;
         } else if (deviceState == DeviceState::editSeconds) {
-            countdownStartValueMs += 1000;
+            countdownStartValueMs += 10000;
         }
 
         // Max value is 99:59
@@ -36,10 +40,12 @@ void EditView::handleInput() {
             countdownStartValueMs = 0;
         }
     }
+
+    this->hasEditBeenRendered = false;
 }
 
 void EditView::render() {
-    ledManager.off();
+    ledManager.setState(LEDManagerState::idle);
 
     View::render();
 
@@ -61,4 +67,6 @@ void EditView::render() {
     display.setFont(&FreeMonoBold18pt7b);
     display.setCursor(12, 44);
     display.print(text);
+
+    this->hasEditBeenRendered = true;
 }
