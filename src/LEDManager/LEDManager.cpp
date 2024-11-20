@@ -38,6 +38,10 @@ void LEDManager::update() {
             this->renderCountingDown();
             break;
 
+        case LEDManagerState::countdownPaused:
+            this->renderCountdownPaused();
+            break;
+
         case LEDManagerState::off:
         default:
             this->renderOff();
@@ -106,3 +110,19 @@ void LEDManager::renderCountingDown() {
     ledArray[0].setRGB(0, 0, static_cast<uint8_t>(intensity));
     ledArray[1].setRGB(0, 0, static_cast<uint8_t>(127 - intensity));
 }
+
+void LEDManager::renderCountdownPaused() {
+    const ulong cycleDurationMs = 4000;
+    ulong cyclePosition = this->currentTickMs % cycleDurationMs;
+
+    float normalizedPosition = static_cast<float>(cyclePosition) / static_cast<float>(cycleDurationMs);
+
+    // Overshoot for longer peaks
+    float intensity = 0.5f + 0.6f * sin(2 * 3.1415f * normalizedPosition);
+    intensity = intensity < 0.0f ? 0.0f : (intensity > 1.0f ? 1.0f : intensity);
+    intensity *= 127;
+
+    ledArray[0].setRGB(static_cast<uint8_t>(intensity), 0, 0);
+    ledArray[1].setRGB(static_cast<uint8_t>(intensity), 0, 0);
+}
+

@@ -32,6 +32,8 @@ class LEDManager {
 
     void renderCountingDown();
 
+    void renderCountdownPaused();
+
 public:
     explicit LEDManager(ulong &currentTickMs) : currentTickMs(currentTickMs) {}
 

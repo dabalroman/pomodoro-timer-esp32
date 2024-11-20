@@ -4,6 +4,7 @@
 enum LEDManagerState {
     ringing,
     countingDown,
+    countdownPaused,
     idle,
     off,
     touchCenter,

@@ -10,6 +10,9 @@ class TimerView : public View {
     DeviceState &deviceState;
     ulong &lastTickMs;
 
+    bool isPaused = false;
+    ulong countdownPausedValueMs = 0;
+
 public:
     TimerView(
             Adafruit_SSD1306 &display,
@@ -28,6 +31,8 @@ public:
     void handleInput() override;
 
     void render() override;
+
+    ulong getTimeLeftMs() const;
 };
 
 

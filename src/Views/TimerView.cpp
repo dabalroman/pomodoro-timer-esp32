@@ -1,31 +1,44 @@
 #include "TimerView.h"
 #include <Fonts/FreeMonoBold18pt7b.h>
 
+ulong TimerView::getTimeLeftMs() const {
+    return this->countdownStartTickMs + this->countdownStartValueMs - this->lastTickMs;
+}
+
 void TimerView::handleInput() {
     if (touch.selectButton.takeActionIfPossible()) {
-        deviceState = DeviceState::ready;
+        this->isPaused = !this->isPaused;
+
+        if (this->isPaused) {
+            this->countdownPausedValueMs = this->getTimeLeftMs();
+        } else {
+            this->countdownStartTickMs = this->lastTickMs;
+            this->countdownStartValueMs = this->countdownPausedValueMs;
+        }
+    }
+
+    if (touch.leftButton.takeActionIfPossible()) {
+        this->deviceState = DeviceState::ready;
     }
 }
 
 void TimerView::render() {
-    ledManager.setState(countingDown);
+    ledManager.setState(this->isPaused ? countdownPaused : countingDown);
 
     View::render();
 
-    ulong countdownValue = countdownStartTickMs + countdownStartValueMs - lastTickMs;
+    ulong countdownValue = this->isPaused ? this->countdownPausedValueMs : this->getTimeLeftMs();
 
-    // React to overflow
-    if (countdownValue >= 4000000000) {
-        countdownValue = 0;
-        deviceState = DeviceState::finish;
+    display.setFont();
+    if (this->isPaused) {
+        display.setCursor(44, 9);
+        display.print("Paused");
+    } else {
+        display.setCursor(28, 9);
+        display.print("Get to work!");
     }
 
     String text = Formatter::formatTime(countdownValue);
-
-    display.setFont();
-    display.setCursor(28, 9);
-    display.print("Get to work!");
-
     display.setFont(&FreeMonoBold18pt7b);
     display.setCursor(12, 44);
     display.print(text);

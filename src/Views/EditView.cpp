@@ -32,12 +32,7 @@ void EditView::handleInput() {
         if (deviceState == DeviceState::editMinutes) {
             countdownStartValueMs -= 60 * 1000;
         } else if (deviceState == DeviceState::editSeconds) {
-            countdownStartValueMs -= 1000;
-        }
-
-        // React to overflow
-        if (countdownStartValueMs >= 4000000000) { // Wrap-around overflow check
-            countdownStartValueMs = 0;
+            countdownStartValueMs -= 10000;
         }
     }
 
