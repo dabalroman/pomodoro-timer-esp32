@@ -11,13 +11,25 @@ protected:
     Adafruit_SSD1306 &display;
     TouchManager &touch;
     LEDManager &ledManager;
+    ulong &lastTickMs;
+
+    ulong lastRenderedOnTickMs = 0;
 
 public:
-    View(Adafruit_SSD1306 &display, TouchManager &touch, LEDManager &ledManager)
-            : display(display), touch(touch), ledManager(ledManager) {}
+    View(
+            Adafruit_SSD1306 &display,
+            TouchManager &touch,
+            LEDManager &ledManager,
+            ulong &lastTickMs
+    ) : display(display),
+        touch(touch),
+        ledManager(ledManager),
+        lastTickMs(lastTickMs) {}
 
-    virtual void handleInput() = 0; // To be implemented by derived classes
+    virtual void handleInput() = 0;
     virtual void render();
+
+    virtual bool shouldRender() const;
 
     virtual ~View() = default;
 };

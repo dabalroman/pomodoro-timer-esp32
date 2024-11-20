@@ -29,10 +29,10 @@ PreferencesManager preferencesManager;
 DeviceState deviceState= ready;
 LEDManager ledManager(lastTickMs);
 
-EditView editView(display, touch, ledManager, preferencesManager, countdownStartValueMs, deviceState, lastTickMs);
-MainView mainView(display, touch, ledManager, countdownStartValueMs, countdownStartTickMs, deviceState, lastTickMs);
-TimerView timerView(display, touch, ledManager, countdownStartValueMs, countdownStartTickMs, deviceState, lastTickMs);
-FinishView finishView(display, touch, ledManager, deviceState, lastTickMs);
+EditView editView(display, touch, ledManager, lastTickMs, preferencesManager, countdownStartValueMs, deviceState);
+MainView mainView(display, touch, ledManager, lastTickMs, countdownStartValueMs, countdownStartTickMs, deviceState);
+TimerView timerView(display, touch, ledManager, lastTickMs, countdownStartValueMs, countdownStartTickMs, deviceState);
+FinishView finishView(display, touch, ledManager, lastTickMs, deviceState);
 
 void triggerTouchLeft() {
     touch.leftButton.trigger();
@@ -120,7 +120,7 @@ void loop() {
     View *currentView = getCurrentView();
     currentView->handleInput();
 
-    if(lastTickMs - lastScreenUpdate >= 100) {
+    if(lastTickMs - lastScreenUpdate >= 50) {
         lastScreenUpdate = lastTickMs;
 
         currentView->render();

@@ -10,6 +10,10 @@ void FinishView::handleInput() {
 void FinishView::render() {
     ledManager.setState(LEDManagerState::ringing);
 
+    if (!this->shouldRender()) {
+        return;
+    }
+
     View::render();
 
     bool showDigits = (lastTickMs / 500) % 2 == 0;
@@ -26,3 +30,9 @@ void FinishView::render() {
         display.print(text);
     }
 }
+
+bool FinishView::shouldRender() const {
+    // 2fps is enough for this view
+    return this->lastTickMs - this->lastRenderedOnTickMs >= 500;
+}
+

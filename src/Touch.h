@@ -32,7 +32,16 @@ public:
     }
 
     bool takeActionIfPossible() {
-        if(touched && !isActionTaken) {
+        if (touched && !isActionTaken) {
+            isActionTaken = true;
+            return true;
+        }
+
+        return false;
+    }
+
+    bool takeActionIfPossibleLongTouch() {
+        if (touched && isLongTouch() && !isActionTaken) {
             isActionTaken = true;
             return true;
         }

@@ -2,7 +2,7 @@
 #include <Fonts/FreeMonoBold18pt7b.h>
 
 void MainView::handleInput() {
-    if (touch.rightButton.takeActionIfPossible()) {
+    if (touch.rightButton.takeActionIfPossibleLongTouch()) {
         deviceState = DeviceState::editMinutes;
     }
 
@@ -15,6 +15,10 @@ void MainView::handleInput() {
 void MainView::render() {
     ledManager.setState(idle);
 
+    if (!this->shouldRender()) {
+        return;
+    }
+
     View::render();
 
     String text = Formatter::formatTime(countdownStartValueMs);
@@ -26,4 +30,10 @@ void MainView::render() {
     display.setFont(&FreeMonoBold18pt7b);
     display.setCursor(12, 44);
     display.print(text);
+}
+
+bool MainView::shouldRender() const {
+    // 1fps is already too much
+    // TODO: Make it update only on device state change, on first render
+    return this->lastTickMs - this->lastRenderedOnTickMs >= 1000;
 }

@@ -8,31 +8,36 @@ class TimerView : public View {
     ulong &countdownStartValueMs;
     ulong &countdownStartTickMs;
     DeviceState &deviceState;
-    ulong &lastTickMs;
 
+    // Pause feature
     bool isPaused = false;
+    bool prevIsPaused = false;
     ulong countdownPausedValueMs = 0;
+    ulong countdownStartValueMsBackup = 0;
 
 public:
     TimerView(
             Adafruit_SSD1306 &display,
             TouchManager &touch,
             LEDManager &ledManager,
+            ulong &lastTickMs,
             ulong &countdownStartValueMs,
             ulong &countdownStartTickMs,
-            DeviceState &deviceState,
-            ulong &lastTickMs
-    ) : View(display, touch, ledManager),
+            DeviceState &deviceState
+    ) : View(display, touch, ledManager, lastTickMs),
         countdownStartValueMs(countdownStartValueMs),
         countdownStartTickMs(countdownStartTickMs),
-        deviceState(deviceState),
-        lastTickMs(lastTickMs) {}
+        deviceState(deviceState) {}
 
     void handleInput() override;
 
     void render() override;
 
+    bool shouldRender() const override;
+
     ulong getTimeLeftMs() const;
+
+    void onExit();
 };
 
 

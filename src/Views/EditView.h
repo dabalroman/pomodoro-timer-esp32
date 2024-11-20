@@ -9,7 +9,6 @@ class EditView : public View {
     PreferencesManager &preferencesManager;
     ulong &countdownStartValueMs;
     DeviceState &deviceState;
-    ulong &lastTickMs;
 
     bool hasEditBeenRendered = true;
 
@@ -18,15 +17,14 @@ public:
             Adafruit_SSD1306 &display,
             TouchManager &touch,
             LEDManager &ledManager,
+            ulong &lastTickMs,
             PreferencesManager &preferencesManager,
             ulong &countdownStartValueMs,
-            DeviceState &deviceState,
-            ulong &lastTickMs
-    ) : View(display, touch, ledManager),
+            DeviceState &deviceState
+    ) : View(display, touch, ledManager, lastTickMs),
         preferencesManager(preferencesManager),
         countdownStartValueMs(countdownStartValueMs),
-        deviceState(deviceState),
-        lastTickMs(lastTickMs) {}
+        deviceState(deviceState) {}
 
     void handleInput() override;
 

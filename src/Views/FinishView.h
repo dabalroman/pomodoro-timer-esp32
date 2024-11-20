@@ -6,23 +6,22 @@
 
 class FinishView : public View {
     DeviceState &deviceState;
-    ulong &lastTickMs;
 
 public:
     FinishView(
             Adafruit_SSD1306 &display,
             TouchManager &touch,
             LEDManager &ledManager,
-            DeviceState &deviceState,
-            ulong &lastTickMs
-    ) : View(display, touch, ledManager),
-        deviceState(deviceState),
-        lastTickMs(lastTickMs) {}
+            ulong &lastTickMs,
+            DeviceState &deviceState
+    ) : View(display, touch, ledManager, lastTickMs),
+        deviceState(deviceState) {}
 
     void handleInput() override;
 
     void render() override;
-};
 
+    bool shouldRender() const override;
+};
 
 #endif //ESP_POMODORO_CLOCK_FINISHVIEW_H

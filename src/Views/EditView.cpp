@@ -21,11 +21,6 @@ void EditView::handleInput() {
         } else if (deviceState == DeviceState::editSeconds) {
             countdownStartValueMs += 10000;
         }
-
-        // Max value is 99:59
-        if (countdownStartValueMs >= (100 * 60 - 1) * 1000) {
-            countdownStartValueMs = (100 * 60 - 1) * 1000;
-        }
     }
 
     if (touch.leftButton.isTouched()) {
@@ -36,11 +31,23 @@ void EditView::handleInput() {
         }
     }
 
+    if (countdownStartValueMs < 10000 || countdownStartValueMs > 4000000000) {
+        countdownStartValueMs = 10000;
+    }
+
+    if (countdownStartValueMs > (99 * 60) * 1000) {
+        countdownStartValueMs = (99 * 60) * 1000;
+    }
+
     this->hasEditBeenRendered = false;
 }
 
 void EditView::render() {
     ledManager.setState(LEDManagerState::idle);
+
+    if (!this->shouldRender()) {
+        return;
+    }
 
     View::render();
 
