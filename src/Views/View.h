@@ -3,7 +3,7 @@
 
 #include <Adafruit_SSD1306.h>
 #include "DeviceState.h"
-#include "TouchManager.h"
+#include "Touch/TouchManager.h"
 #include "LEDManager/LEDManager.h"
 #include "../lib/Formatter.h"
 

@@ -4,7 +4,7 @@
 #include "FastLED.h"
 #include "LEDManagerState.h"
 
-#define LED_UPDATE_EVERY_MS 40
+#define LED_UPDATE_EVERY_MS 25
 
 #define LED_GPIO 12
 #define LED_TYPE WS2811

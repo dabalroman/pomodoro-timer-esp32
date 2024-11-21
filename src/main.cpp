@@ -1,7 +1,7 @@
 #include "../lib/Formatter.h"
 #include "DeviceState.h"
 #include "PreferencesManager.h"
-#include "TouchManager.h"
+#include "Touch/TouchManager.h"
 #include "Views/EditTimerView.h"
 #include "Views/FinishView.h"
 #include "Views/MainView.h"
@@ -132,5 +132,5 @@ void loop() {
         display.display();
     }
 
-    delay(20);
+    delay(1);
 }

@@ -6,6 +6,6 @@ void View::render() {
 }
 
 bool View::shouldRender() const {
-    // Cap to 20fps
-    return this->lastTickMs - this->lastRenderedOnTickMs >= 50;
+    // Cap to 10fps
+    return this->lastTickMs - this->lastRenderedOnTickMs >= 100;
 }

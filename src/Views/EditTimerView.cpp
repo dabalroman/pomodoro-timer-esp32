@@ -51,7 +51,7 @@ void EditTimerView::render() {
 
     View::render();
 
-    bool showDigit = (lastTickMs / 300) % 2 == 0;
+    bool showDigit = (lastTickMs / 300) % 4 > 0;
     String text = "";
 
     if (this->deviceState == editMinutes) {
