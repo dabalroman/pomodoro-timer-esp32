@@ -3,6 +3,7 @@
 
 enum DeviceState {
     ready,
+    settings,
     editMinutes,
     editSeconds,
     counting,

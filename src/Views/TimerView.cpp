@@ -6,7 +6,7 @@ ulong TimerView::getTimeLeftMs() const {
 }
 
 void TimerView::handleInput() {
-    if (touch.selectButton.takeActionIfPossible()) {
+    if (this->touch.selectButton.takeActionIfPossible()) {
         this->isPaused = !this->isPaused;
 
         // Remember original countdown value, so pause feature does not affect future timers
@@ -22,7 +22,7 @@ void TimerView::handleInput() {
         }
     }
 
-    if (touch.leftButton.takeActionIfPossibleLongTouch()) {
+    if (this->touch.leftButton.takeActionIfPossibleLongTouch()) {
         this->deviceState = DeviceState::ready;
         this->onExit();
     }
@@ -58,19 +58,19 @@ void TimerView::render() {
         currentCountdownValueMs = 0;
     }
 
-    display.setFont();
+    this->display.setFont();
     if (this->isPaused) {
-        display.setCursor(44, 9);
-        display.print("Paused");
+        this->display.setCursor(44, 9);
+        this->display.print("Paused");
     } else {
-        display.setCursor(28, 9);
-        display.print("Get to work!");
+        this->display.setCursor(28, 9);
+        this->display.print("Get to work!");
     }
 
     String text = Formatter::formatTime(currentCountdownValueMs);
-    display.setFont(&FreeMonoBold18pt7b);
-    display.setCursor(12, 44);
-    display.print(text);
+    this->display.setFont(&FreeMonoBold18pt7b);
+    this->display.setCursor(12, 44);
+    this->display.print(text);
 
     this->prevIsPaused = isPaused;
 }

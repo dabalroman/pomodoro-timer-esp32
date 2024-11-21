@@ -2,12 +2,10 @@
 #define ESP_POMODORO_CLOCK_TIMERVIEW_H
 
 #include "View.h"
-#include "DeviceState.h"
 
 class TimerView : public View {
     ulong &countdownStartValueMs;
     ulong &countdownStartTickMs;
-    DeviceState &deviceState;
 
     // Pause feature
     bool isPaused = false;
@@ -17,17 +15,16 @@ class TimerView : public View {
 
 public:
     TimerView(
+            DeviceState &deviceState,
             Adafruit_SSD1306 &display,
             TouchManager &touch,
             LEDManager &ledManager,
             ulong &lastTickMs,
             ulong &countdownStartValueMs,
-            ulong &countdownStartTickMs,
-            DeviceState &deviceState
-    ) : View(display, touch, ledManager, lastTickMs),
+            ulong &countdownStartTickMs
+    ) : View(deviceState, display, touch, ledManager, lastTickMs),
         countdownStartValueMs(countdownStartValueMs),
-        countdownStartTickMs(countdownStartTickMs),
-        deviceState(deviceState) {}
+        countdownStartTickMs(countdownStartTickMs) {}
 
     void handleInput() override;
 

@@ -2,20 +2,16 @@
 #define ESP_POMODORO_CLOCK_FINISHVIEW_H
 
 #include "View.h"
-#include "DeviceState.h"
 
 class FinishView : public View {
-    DeviceState &deviceState;
-
 public:
     FinishView(
+            DeviceState &deviceState,
             Adafruit_SSD1306 &display,
             TouchManager &touch,
             LEDManager &ledManager,
-            ulong &lastTickMs,
-            DeviceState &deviceState
-    ) : View(display, touch, ledManager, lastTickMs),
-        deviceState(deviceState) {}
+            ulong &lastTickMs
+    ) : View(deviceState, display, touch, ledManager, lastTickMs) {}
 
     void handleInput() override;
 

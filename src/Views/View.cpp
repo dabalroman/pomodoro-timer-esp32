@@ -2,7 +2,7 @@
 
 void View::render() {
     this->lastRenderedOnTickMs = this->lastTickMs;
-    display.clearDisplay();
+    this->display.clearDisplay();
 }
 
 bool View::shouldRender() const {

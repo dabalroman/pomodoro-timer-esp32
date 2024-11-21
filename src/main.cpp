@@ -2,11 +2,12 @@
 #include "DeviceState.h"
 #include "PreferencesManager.h"
 #include "TouchManager.h"
-#include "Views/EditView.h"
+#include "Views/EditTimerView.h"
 #include "Views/FinishView.h"
 #include "Views/MainView.h"
 #include "Views/TimerView.h"
 #include "LEDManager/LEDManager.h"
+#include "Views/SettingsView.h"
 #include <Adafruit_SSD1306.h>
 #include <Arduino.h>
 #include <Fonts/FreeMonoBold18pt7b.h>
@@ -26,13 +27,14 @@ ulong lastScreenUpdate = 0;
 
 TouchManager touch;
 PreferencesManager preferencesManager;
-DeviceState deviceState= ready;
+DeviceState deviceState = ready;
 LEDManager ledManager(lastTickMs);
 
-EditView editView(display, touch, ledManager, lastTickMs, preferencesManager, countdownStartValueMs, deviceState);
-MainView mainView(display, touch, ledManager, lastTickMs, countdownStartValueMs, countdownStartTickMs, deviceState);
-TimerView timerView(display, touch, ledManager, lastTickMs, countdownStartValueMs, countdownStartTickMs, deviceState);
-FinishView finishView(display, touch, ledManager, lastTickMs, deviceState);
+MainView mainView(deviceState, display, touch, ledManager, lastTickMs, countdownStartValueMs, countdownStartTickMs);
+SettingsView settingsView(deviceState, display, touch, ledManager, lastTickMs, preferencesManager);
+EditTimerView editTimerView(deviceState, display, touch, ledManager, lastTickMs, preferencesManager, countdownStartValueMs);
+TimerView timerView(deviceState, display, touch, ledManager, lastTickMs, countdownStartValueMs, countdownStartTickMs);
+FinishView finishView(deviceState, display, touch, ledManager, lastTickMs);
 
 void triggerTouchLeft() {
     touch.leftButton.trigger();
@@ -79,7 +81,10 @@ View *getCurrentView() {
     switch (deviceState) {
         case DeviceState::editMinutes:
         case DeviceState::editSeconds:
-            return &editView;
+            return &editTimerView;
+
+        case DeviceState::settings:
+            return &settingsView;
 
         case DeviceState::ready:
             return &mainView;

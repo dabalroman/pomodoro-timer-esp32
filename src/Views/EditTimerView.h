@@ -1,30 +1,27 @@
-#ifndef ESP_POMODORO_CLOCK_EDITVIEW_H
-#define ESP_POMODORO_CLOCK_EDITVIEW_H
+#ifndef ESP_POMODORO_CLOCK_EDITTIMERVIEW_H
+#define ESP_POMODORO_CLOCK_EDITTIMERVIEW_H
 
 #include "View.h"
-#include "DeviceState.h"
 #include "PreferencesManager.h"
 
-class EditView : public View {
+class EditTimerView : public View {
     PreferencesManager &preferencesManager;
     ulong &countdownStartValueMs;
-    DeviceState &deviceState;
 
     bool hasEditBeenRendered = true;
 
 public:
-    EditView(
+    EditTimerView(
+            DeviceState &deviceState,
             Adafruit_SSD1306 &display,
             TouchManager &touch,
             LEDManager &ledManager,
             ulong &lastTickMs,
             PreferencesManager &preferencesManager,
-            ulong &countdownStartValueMs,
-            DeviceState &deviceState
-    ) : View(display, touch, ledManager, lastTickMs),
+            ulong &countdownStartValueMs
+    ) : View(deviceState, display, touch, ledManager, lastTickMs),
         preferencesManager(preferencesManager),
-        countdownStartValueMs(countdownStartValueMs),
-        deviceState(deviceState) {}
+        countdownStartValueMs(countdownStartValueMs) {}
 
     void handleInput() override;
 
@@ -32,4 +29,4 @@ public:
 };
 
 
-#endif //ESP_POMODORO_CLOCK_EDITVIEW_H
+#endif //ESP_POMODORO_CLOCK_EDITTIMERVIEW_H

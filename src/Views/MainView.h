@@ -2,26 +2,23 @@
 #define ESP_POMODORO_CLOCK_MAINVIEW_H
 
 #include "View.h"
-#include "DeviceState.h"
 
 class MainView : public View {
     ulong &countdownStartValueMs;
     ulong &countdownStartTickMs;
-    DeviceState &deviceState;
 
 public:
     MainView(
+            DeviceState &deviceState,
             Adafruit_SSD1306 &display,
             TouchManager &touch,
             LEDManager &ledManager,
             ulong &lastTickMs,
             ulong &countdownStartValueMs,
-            ulong &countdownStartTickMs,
-            DeviceState &deviceState
-    ) : View(display, touch, ledManager, lastTickMs),
+            ulong &countdownStartTickMs
+    ) : View(deviceState, display, touch, ledManager, lastTickMs),
         countdownStartValueMs(countdownStartValueMs),
-        countdownStartTickMs(countdownStartTickMs),
-        deviceState(deviceState) {}
+        countdownStartTickMs(countdownStartTickMs) {}
 
     void handleInput() override;
 

@@ -3,17 +3,17 @@
 
 void MainView::handleInput() {
     if (touch.rightButton.takeActionIfPossibleLongTouch()) {
-        deviceState = DeviceState::editMinutes;
+        this->deviceState = DeviceState::settings;
     }
 
     if (touch.selectButton.takeActionIfPossible()) {
-        deviceState = DeviceState::counting;
-        countdownStartTickMs = lastTickMs;
+        this->deviceState = DeviceState::counting;
+        this->countdownStartTickMs = lastTickMs;
     }
 }
 
 void MainView::render() {
-    ledManager.setState(idle);
+    this->ledManager.setState(idle);
 
     if (!this->shouldRender()) {
         return;
@@ -23,13 +23,13 @@ void MainView::render() {
 
     String text = Formatter::formatTime(countdownStartValueMs);
 
-    display.setFont();
-    display.setCursor(49, 9);
-    display.print("Ready");
+    this->display.setFont();
+    this->display.setCursor(49, 9);
+    this->display.print("Ready");
 
-    display.setFont(&FreeMonoBold18pt7b);
-    display.setCursor(12, 44);
-    display.print(text);
+    this->display.setFont(&FreeMonoBold18pt7b);
+    this->display.setCursor(12, 44);
+    this->display.print(text);
 }
 
 bool MainView::shouldRender() const {
