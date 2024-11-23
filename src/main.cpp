@@ -1,4 +1,3 @@
-#include "../lib/Formatter.h"
 #include "DeviceState.h"
 #include "PreferencesManager.h"
 #include "Touch/TouchManager.h"
@@ -8,6 +7,7 @@
 #include "Views/TimerView.h"
 #include "LEDManager/LEDManager.h"
 #include "Views/SettingsView.h"
+#include "Views/EditPomodoroTargetView.h"
 #include <Adafruit_SSD1306.h>
 #include <Arduino.h>
 #include <Fonts/FreeMonoBold18pt7b.h>
@@ -24,17 +24,20 @@ ulong lastTickMs = 0;
 ulong countdownStartTickMs = 0;
 ulong countdownStartValueMs = 25 * 60 * 1000;
 ulong lastScreenUpdate = 0;
+uint8_t pomodoroTargetAmount = 0;
+uint8_t pomodoroFinishedAmount = 0;
 
 TouchManager touch;
 PreferencesManager preferencesManager;
 DeviceState deviceState = ready;
 LEDManager ledManager(lastTickMs);
 
-MainView mainView(deviceState, display, touch, ledManager, lastTickMs, countdownStartValueMs, countdownStartTickMs);
+MainView mainView(deviceState, display, touch, ledManager, lastTickMs, countdownStartValueMs, countdownStartTickMs, pomodoroTargetAmount, pomodoroFinishedAmount);
 SettingsView settingsView(deviceState, display, touch, ledManager, lastTickMs, preferencesManager);
 EditTimerView editTimerView(deviceState, display, touch, ledManager, lastTickMs, preferencesManager, countdownStartValueMs);
+EditPomodoroTargetView editPomodoroTargetView(deviceState, display, touch, ledManager, lastTickMs, preferencesManager, pomodoroTargetAmount);
 TimerView timerView(deviceState, display, touch, ledManager, lastTickMs, countdownStartValueMs, countdownStartTickMs);
-FinishView finishView(deviceState, display, touch, ledManager, lastTickMs);
+FinishView finishView(deviceState, display, touch, ledManager, lastTickMs, pomodoroFinishedAmount);
 
 void triggerTouchLeft() {
     touch.leftButton.trigger();
@@ -56,7 +59,12 @@ void setup() {
     // Setup display
     if (!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
         Serial.println(F("SSD1306 allocation failed"));
-        for (;;);
+        ledManager.setState(LEDManagerState::countdownPaused);
+
+        for (;;) {
+            ledManager.update();
+            delay(1);
+        }
     }
 
     delay(2000);
@@ -75,6 +83,7 @@ void setup() {
     lastTickMs = millis();
     countdownStartTickMs = lastTickMs;
     countdownStartValueMs = preferencesManager.getCountdownStartValueMs(25 * 60 * 1000);
+    pomodoroTargetAmount = preferencesManager.getTargetPomodoroAmount(0);
 }
 
 View *getCurrentView() {
@@ -82,6 +91,9 @@ View *getCurrentView() {
         case DeviceState::editMinutes:
         case DeviceState::editSeconds:
             return &editTimerView;
+
+        case DeviceState::editPomodoroTarget:
+            return &editPomodoroTargetView;
 
         case DeviceState::settings:
             return &settingsView;

@@ -23,3 +23,8 @@ Kicad project is available in `esp-pomodoro-clock` directory.
 
 # Software
 - Custom software based on Platform.io using Arduino framework
+
+# TODO
+- NTP sync with RTC
+- Timer presets
+- Daily pomodoro target

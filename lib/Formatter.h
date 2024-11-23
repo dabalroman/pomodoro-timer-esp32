@@ -1,7 +1,8 @@
-#include <Arduino.h>
-
 #ifndef ESP_POMODORO_CLOCK_FORMATTERS_H
 #define ESP_POMODORO_CLOCK_FORMATTERS_H
+
+#include <Arduino.h>
+#include <Adafruit_SSD1306.h>
 
 class Formatter {
 public:
@@ -22,6 +23,18 @@ public:
         ulong minutes = getMinutesFromTime(timeInTicksMs);
 
         return formatNumber(minutes) + ':' + formatNumber(seconds);
+    }
+
+    static void printCenteredText(Adafruit_SSD1306 &display, const char* text, short x, short y) {
+        int16_t x1, y1;
+        uint16_t textWidth, textHeight;
+
+        display.getTextBounds(text, 0, 0, &x1, &y1, &textWidth, &textHeight);
+
+        int16_t xPos = x - (textWidth / 2);
+
+        display.setCursor(xPos, y);
+        display.print(text);
     }
 };
 

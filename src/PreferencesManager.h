@@ -33,17 +33,17 @@ public:
         preferences.end();
     }
 
-    uint getTargetPomodoroAmount(uint defaultValue) {
+    uint8_t getTargetPomodoroAmount(uint8_t defaultValue) {
         preferences.begin(PREFERENCES_NAMESPACE, true);
-        ulong value = preferences.getUInt(PREFERENCES_KEY_TARGET_POMODORO_AMOUNT, defaultValue);
+        ulong value = preferences.getUChar(PREFERENCES_KEY_TARGET_POMODORO_AMOUNT, defaultValue);
         preferences.end();
 
         return value;
     }
 
-    void saveTargetPomodoroAmount(uint value) {
+    void saveTargetPomodoroAmount(uint8_t value) {
         preferences.begin(PREFERENCES_NAMESPACE, false);
-        preferences.putUInt(PREFERENCES_KEY_TARGET_POMODORO_AMOUNT, value);
+        preferences.putUChar(PREFERENCES_KEY_TARGET_POMODORO_AMOUNT, value);
         preferences.end();
     }
 };

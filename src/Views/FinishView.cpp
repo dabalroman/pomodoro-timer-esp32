@@ -4,6 +4,7 @@
 void FinishView::handleInput() {
     if (touch.selectButton.takeActionIfPossible()) {
         this->deviceState = DeviceState::ready;
+        this->pomodoroFinishedAmount++;
     }
 }
 

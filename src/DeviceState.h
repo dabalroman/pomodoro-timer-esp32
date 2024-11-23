@@ -6,6 +6,7 @@ enum DeviceState {
     settings,
     editMinutes,
     editSeconds,
+    editPomodoroTarget,
     counting,
     finish
 };

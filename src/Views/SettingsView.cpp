@@ -8,7 +8,7 @@ void SettingsView::handleInput() {
                 break;
 
             case Settings::targetAmountOfPomodoros:
-                this->deviceState = DeviceState::ready;
+                this->deviceState = DeviceState::editPomodoroTarget;
                 break;
 
             case Settings::goBack:
@@ -56,7 +56,7 @@ void SettingsView::render() {
     this->display.print("Timer length");
 
     this->display.setCursor(10, 22 + 12);
-    this->display.print("Amount of pomodoros");
+    this->display.print("Pomodoro target");
 
     this->display.setCursor(10, 22 + 12 * 2);
     this->display.print("Return");

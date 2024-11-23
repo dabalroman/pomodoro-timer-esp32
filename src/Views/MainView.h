@@ -6,6 +6,8 @@
 class MainView : public View {
     ulong &countdownStartValueMs;
     ulong &countdownStartTickMs;
+    uint8_t &pomodoroTargetAmount;
+    uint8_t &pomodoroFinishedAmount;
 
 public:
     MainView(
@@ -15,10 +17,14 @@ public:
             LEDManager &ledManager,
             ulong &lastTickMs,
             ulong &countdownStartValueMs,
-            ulong &countdownStartTickMs
+            ulong &countdownStartTickMs,
+            uint8_t &pomodoroTargetAmount,
+            uint8_t &pomodoroFinishedAmount
     ) : View(deviceState, display, touch, ledManager, lastTickMs),
         countdownStartValueMs(countdownStartValueMs),
-        countdownStartTickMs(countdownStartTickMs) {}
+        countdownStartTickMs(countdownStartTickMs),
+        pomodoroTargetAmount(pomodoroTargetAmount),
+        pomodoroFinishedAmount(pomodoroFinishedAmount) {}
 
     void handleInput() override;
 

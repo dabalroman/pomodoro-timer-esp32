@@ -24,8 +24,13 @@ void MainView::render() {
     String text = Formatter::formatTime(countdownStartValueMs);
 
     this->display.setFont();
-    this->display.setCursor(49, 9);
-    this->display.print("Ready");
+    Formatter::printCenteredText(this->display, "Ready", 64, 9);
+
+    if (this->pomodoroTargetAmount != 0) {
+        char buffer[7];
+        snprintf(buffer, sizeof(buffer), "%d / %d", this->pomodoroFinishedAmount, this->pomodoroTargetAmount);
+        Formatter::printCenteredText(this->display, buffer, 64, 49);
+    }
 
     this->display.setFont(&FreeMonoBold18pt7b);
     this->display.setCursor(12, 44);

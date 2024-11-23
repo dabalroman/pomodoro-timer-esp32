@@ -4,14 +4,18 @@
 #include "View.h"
 
 class FinishView : public View {
+    uint8_t &pomodoroFinishedAmount;
+
 public:
     FinishView(
             DeviceState &deviceState,
             Adafruit_SSD1306 &display,
             TouchManager &touch,
             LEDManager &ledManager,
-            ulong &lastTickMs
-    ) : View(deviceState, display, touch, ledManager, lastTickMs) {}
+            ulong &lastTickMs,
+            uint8_t &pomodoroFinishedAmount
+    ) : View(deviceState, display, touch, ledManager, lastTickMs),
+        pomodoroFinishedAmount(pomodoroFinishedAmount) {}
 
     void handleInput() override;
 
