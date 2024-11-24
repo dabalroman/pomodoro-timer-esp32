@@ -6,6 +6,8 @@
 #define PREFERENCES_NAMESPACE "ns"
 #define PREFERENCES_KEY_COUNTDOWN_START_VALUE_MS "csvm"
 #define PREFERENCES_KEY_TARGET_POMODORO_AMOUNT "tpa"
+#define PREFERENCES_KEY_WIFI_SSID "wifi_ssid"
+#define PREFERENCES_KEY_WIFI_PASSWORD "wifi_pass"
 
 class PreferencesManager {
     Preferences preferences;
@@ -44,6 +46,34 @@ public:
     void saveTargetPomodoroAmount(uint8_t value) {
         preferences.begin(PREFERENCES_NAMESPACE, false);
         preferences.putUChar(PREFERENCES_KEY_TARGET_POMODORO_AMOUNT, value);
+        preferences.end();
+    }
+
+    // Wi-Fi SSID
+    String getWiFiSSID(const String &defaultValue = "") {
+        preferences.begin(PREFERENCES_NAMESPACE, true);
+        String ssid = preferences.getString(PREFERENCES_KEY_WIFI_SSID, defaultValue);
+        preferences.end();
+        return ssid;
+    }
+
+    void saveWiFiSSID(const String &ssid) {
+        preferences.begin(PREFERENCES_NAMESPACE, false);
+        preferences.putString(PREFERENCES_KEY_WIFI_SSID, ssid);
+        preferences.end();
+    }
+
+    // Wi-Fi Password
+    String getWiFiPassword(const String &defaultValue = "") {
+        preferences.begin(PREFERENCES_NAMESPACE, true);
+        String password = preferences.getString(PREFERENCES_KEY_WIFI_PASSWORD, defaultValue);
+        preferences.end();
+        return password;
+    }
+
+    void saveWiFiPassword(const String &password) {
+        preferences.begin(PREFERENCES_NAMESPACE, false);
+        preferences.putString(PREFERENCES_KEY_WIFI_PASSWORD, password);
         preferences.end();
     }
 };

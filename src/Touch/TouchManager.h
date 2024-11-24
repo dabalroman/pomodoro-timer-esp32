@@ -14,16 +14,6 @@ public:
     Touch selectButton = Touch(GPIO_TOUCH_S);
     Touch rightButton = Touch(GPIO_TOUCH_R);
 
-    String getTouchDebugValue() const {
-        return String()
-               + "L" + (this->leftButton.isTouched() ? "_" : "-")
-               + (this->leftButton.canTakeAction() ? "O" : "X")
-               + "      S" + (this->selectButton.isTouched() ? "_" : "-")
-               + (this->selectButton.canTakeAction() ? "O" : "X")
-               + "      R" + (this->rightButton.isTouched() ? "_" : "-")
-               + (this->rightButton.canTakeAction() ? "O" : "X");
-    }
-
     void update() {
         this->leftButton.updateState();
         this->selectButton.updateState();
