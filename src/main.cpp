@@ -101,8 +101,8 @@ void setup() {
     // Setup environment
     lastTickMs = millis();
     countdownStartTickMs = lastTickMs;
-    countdownStartValueMs = preferencesManager.getCountdownStartValueMs(25 * 60 * 1000);
-    pomodoroTargetAmount = preferencesManager.getTargetPomodoroAmount(0);
+    countdownStartValueMs = preferencesManager.getCountdownStartValueMs();
+    pomodoroTargetAmount = preferencesManager.getTargetPomodoroAmount();
 
 
     if(preferencesManager.getWiFiSSID().length() == 0) {
