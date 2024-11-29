@@ -7,9 +7,12 @@ enum LEDManagerState {
     countdownPaused,
     idle,
     off,
-    touchCenter,
+    touchSelect,
     touchLeft,
     touchRight,
+    longTouchSelect,
+    longTouchLeft,
+    longTouchRight,
 };
 
 

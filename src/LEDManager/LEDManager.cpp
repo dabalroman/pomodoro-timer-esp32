@@ -26,12 +26,24 @@ void LEDManager::update() {
             this->renderTouchLeft();
             break;
 
-        case LEDManagerState::touchCenter:
-            this->renderTouchCenter();
+        case LEDManagerState::longTouchLeft:
+            this->renderTouchLeft(true);
+            break;
+
+        case LEDManagerState::touchSelect:
+            this->renderTouchSelect();
+            break;
+
+        case LEDManagerState::longTouchSelect:
+            this->renderTouchSelect(true);
             break;
 
         case LEDManagerState::touchRight:
             this->renderTouchRight();
+            break;
+
+        case LEDManagerState::longTouchRight:
+            this->renderTouchRight(true);
             break;
 
         case LEDManagerState::countingDown:
@@ -65,20 +77,19 @@ void LEDManager::renderOff() {
     ledArray[1].setRGB(0, 0, 0);
 }
 
-void LEDManager::renderTouchLeft() {
-    ledArray[0].setRGB(0, 255, 0);
+void LEDManager::renderTouchLeft(bool isLongTouch) {
+    ledArray[0].setHSV(85 + isLongTouch * 15, 255, 255);
     ledArray[1].setRGB(0, 0, 0);
 }
 
-void LEDManager::renderTouchCenter() {
-    ledArray[0].setRGB(0, 127, 127);
-    ledArray[1].setRGB(0, 127, 127);
+void LEDManager::renderTouchSelect(bool isLongTouch) {
+    ledArray[0].setHSV(128 + isLongTouch * 15, 255, 127);
+    ledArray[1].setHSV(128 + isLongTouch * 15, 255, 127);
 }
 
-
-void LEDManager::renderTouchRight() {
+void LEDManager::renderTouchRight(bool isLongTouch) {
     ledArray[0].setRGB(0, 0, 0);
-    ledArray[1].setRGB(0, 0, 255);
+    ledArray[1].setHSV(170 + isLongTouch * 15, 255, 255);
 }
 
 void LEDManager::renderRinging() {
@@ -92,8 +103,13 @@ void LEDManager::renderRinging() {
     intensity = intensity < 0.0f ? 0.0f : (intensity > 1.0f ? 1.0f : intensity);
     intensity *= 255;
 
-    ledArray[0].setRGB(static_cast<uint8_t>(intensity), 0, static_cast<uint8_t>(255 - intensity));
-    ledArray[1].setRGB(static_cast<uint8_t>(255 - intensity), 0, static_cast<uint8_t>(intensity));
+    uint8_t hue = (this->currentTickMs / 100) % 256;
+    CRGB color = CHSV(hue, 255, static_cast<uint8_t>(intensity));
+    ledArray[0].setRGB(color.r, color.g, color.b);
+
+    hue = (this->currentTickMs / 100 + 128) % 256;
+    color = CHSV(hue, 255, static_cast<uint8_t>(255 - intensity));
+    ledArray[1].setRGB(color.r, color.g, color.b);
 }
 
 void LEDManager::renderCountingDown() {

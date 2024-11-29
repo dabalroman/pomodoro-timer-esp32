@@ -48,10 +48,10 @@ LEDManager ledManager(lastTickMs);
 MainView mainView(deviceState, display, touch, ledManager, lastTickMs, countdownStartValueMs, countdownStartTickMs,
                   pomodoroTargetAmount, pomodoroFinishedAmount);
 SettingsView settingsView(deviceState, display, touch, ledManager, lastTickMs, preferencesManager);
-EditTimerView editTimerView(deviceState, display, touch, ledManager, lastTickMs, preferencesManager,
-                            countdownStartValueMs);
-EditPomodoroTargetView editPomodoroTargetView(deviceState, display, touch, ledManager, lastTickMs, preferencesManager,
-                                              pomodoroTargetAmount);
+EditTimerView editTimerView(
+        deviceState, display, touch, ledManager, lastTickMs, preferencesManager, countdownStartValueMs);
+EditPomodoroTargetView editPomodoroTargetView(
+        deviceState, display, touch, ledManager, lastTickMs, preferencesManager, pomodoroTargetAmount);
 TimerView timerView(deviceState, display, touch, ledManager, lastTickMs, countdownStartValueMs, countdownStartTickMs);
 FinishView finishView(deviceState, display, touch, ledManager, lastTickMs, pomodoroFinishedAmount);
 
@@ -68,6 +68,7 @@ void triggerTouchRight() {
 }
 
 void startWiFiSetup();
+
 bool connectToSavedWiFi();
 
 void setup() {
@@ -105,7 +106,7 @@ void setup() {
     pomodoroTargetAmount = preferencesManager.getTargetPomodoroAmount();
 
 
-    if(preferencesManager.getWiFiSSID().length() == 0) {
+    if (preferencesManager.getWiFiSSID().length() == 0) {
         startWiFiSetup();
     } else {
         connectToSavedWiFi();
@@ -288,11 +289,14 @@ void loop() {
 
     // Touch feedback is the most important one, so let it override other values before render
     if (touch.leftButton.isTouched()) {
-        ledManager.setState(LEDManagerState::touchLeft);
+        ledManager.setState(
+                touch.leftButton.isLongTouch() ? LEDManagerState::longTouchLeft : LEDManagerState::touchLeft);
     } else if (touch.selectButton.isTouched()) {
-        ledManager.setState(LEDManagerState::touchCenter);
+        ledManager.setState(
+                touch.selectButton.isLongTouch() ? LEDManagerState::longTouchSelect : LEDManagerState::touchSelect);
     } else if (touch.rightButton.isTouched()) {
-        ledManager.setState(LEDManagerState::touchRight);
+        ledManager.setState(
+                touch.rightButton.isLongTouch() ? LEDManagerState::longTouchRight : LEDManagerState::touchRight);
     }
 
     ledManager.update();

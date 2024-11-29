@@ -20,11 +20,11 @@ class LEDManager {
 
     bool shouldUpdate() const;
 
-    void renderTouchLeft();
+    void renderTouchLeft(bool isLongTouch = false);
 
-    void renderTouchCenter();
+    void renderTouchSelect(bool isLongTouch = false);
 
-    void renderTouchRight();
+    void renderTouchRight(bool isLongTouch = false);
 
     void renderOff();
 
