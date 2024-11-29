@@ -2,13 +2,15 @@
 #include <Fonts/FreeMonoBold18pt7b.h>
 
 void MainView::handleInput() {
-    if (touch.rightButton.takeActionIfPossibleLongTouch()) {
+    if (this->touch.rightButton.takeActionIfPossibleLongTouch()) {
         this->deviceState = DeviceState::settings;
+        this->touch.preventAccidentalActionFor();
     }
 
-    if (touch.selectButton.takeActionIfPossible()) {
+    if (this->touch.selectButton.takeActionIfPossible()) {
         this->deviceState = DeviceState::counting;
         this->countdownStartTickMs = lastTickMs;
+        this->touch.preventAccidentalActionFor();
     }
 }
 

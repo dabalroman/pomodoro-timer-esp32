@@ -9,8 +9,14 @@ class Touch {
 private:
     uint8_t gpio;
     ulong touchedAt = 0;
+    ulong canTouchAt = 0;
     bool touched = false;
     bool isActionTaken = false;
+
+    void takeAction() {
+        isActionTaken = true;
+        this->canTouchAt = millis() + 50;
+    }
 
 public:
     explicit Touch(uint8_t gpio) {
@@ -23,17 +29,17 @@ public:
         this->touchedAt = millis();
     }
 
+    void preventAccidentalActionFor(ulong delay = 500) {
+        this->canTouchAt = millis() + delay;
+    }
+
     uint8_t getGPIO() const {
         return gpio;
     }
 
-    bool canTakeAction() const {
-        return !isActionTaken;
-    }
-
     bool takeActionIfPossible() {
-        if (touched && !isActionTaken) {
-            isActionTaken = true;
+        if (touched && !isActionTaken && canTouchAt <= millis()) {
+            this->takeAction();
             return true;
         }
 
@@ -41,16 +47,12 @@ public:
     }
 
     bool takeActionIfPossibleLongTouch() {
-        if (touched && isLongTouch() && !isActionTaken) {
-            isActionTaken = true;
+        if (touched && isLongTouch() && !isActionTaken && canTouchAt <= millis()) {
+            this->takeAction();
             return true;
         }
 
         return false;
-    }
-
-    void takeAction() {
-        isActionTaken = true;
     }
 
     bool isTouched() const {

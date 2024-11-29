@@ -19,6 +19,12 @@ public:
         this->selectButton.updateState();
         this->rightButton.updateState();
     }
+
+    void preventAccidentalActionFor(ulong delay = 500) {
+        this->leftButton.preventAccidentalActionFor(delay);
+        this->selectButton.preventAccidentalActionFor(delay);
+        this->rightButton.preventAccidentalActionFor(delay);
+    }
 };
 
 #endif //ESP_POMODORO_CLOCK_TOUCHMANAGER_H
