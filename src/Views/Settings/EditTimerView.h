@@ -1,7 +1,7 @@
 #ifndef ESP_POMODORO_CLOCK_EDITTIMERVIEW_H
 #define ESP_POMODORO_CLOCK_EDITTIMERVIEW_H
 
-#include "View.h"
+#include "Views/View.h"
 #include "PreferencesManager.h"
 
 class EditTimerView : public View {

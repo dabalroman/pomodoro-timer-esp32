@@ -1,5 +1,5 @@
 #include "EditTimerView.h"
-#include <Fonts/FreeMonoBold18pt7b.h>
+#include "Fonts/FreeMonoBold18pt7b.h"
 
 void EditTimerView::handleInput() {
     if (!this->hasEditBeenRendered) {
@@ -7,10 +7,10 @@ void EditTimerView::handleInput() {
     }
 
     if (touch.selectButton.takeActionIfPossible()) {
-        if (this->deviceState == DeviceState::editMinutes) {
-            this->deviceState = DeviceState::editSeconds;
+        if (this->deviceState == DeviceState::edit_timeMinutes) {
+            this->deviceState = DeviceState::edit_timeSeconds;
             this->touch.preventAccidentalActionFor();
-        } else if (this->deviceState == DeviceState::editSeconds) {
+        } else if (this->deviceState == DeviceState::edit_timeSeconds) {
             this->preferencesManager.saveCountdownStartValueMs(this->countdownStartValueMs);
             this->deviceState = DeviceState::settings;
             this->touch.preventAccidentalActionFor();
@@ -18,17 +18,17 @@ void EditTimerView::handleInput() {
     }
 
     if (touch.rightButton.isTouched()) {
-        if (this->deviceState == DeviceState::editMinutes) {
+        if (this->deviceState == DeviceState::edit_timeMinutes) {
             this->countdownStartValueMs += 60 * 1000;
-        } else if (this->deviceState == DeviceState::editSeconds) {
+        } else if (this->deviceState == DeviceState::edit_timeSeconds) {
             this->countdownStartValueMs += 10000;
         }
     }
 
     if (touch.leftButton.isTouched()) {
-        if (this->deviceState == DeviceState::editMinutes) {
+        if (this->deviceState == DeviceState::edit_timeMinutes) {
             this->countdownStartValueMs -= 60 * 1000;
-        } else if (this->deviceState == DeviceState::editSeconds) {
+        } else if (this->deviceState == DeviceState::edit_timeSeconds) {
             this->countdownStartValueMs -= 10000;
         }
     }
@@ -56,10 +56,10 @@ void EditTimerView::render() {
     bool showDigit = (lastTickMs / 300) % 4 > 0;
     String text = "";
 
-    if (this->deviceState == editMinutes) {
+    if (this->deviceState == edit_timeMinutes) {
         text += showDigit ? Formatter::formatNumber(Formatter::getMinutesFromTime(this->countdownStartValueMs)) : "  ";
         text += ":" + Formatter::formatNumber(Formatter::getSecondsFromTime(this->countdownStartValueMs));
-    } else if (this->deviceState == editSeconds) {
+    } else if (this->deviceState == edit_timeSeconds) {
         text += Formatter::formatNumber(Formatter::getMinutesFromTime(this->countdownStartValueMs)) + ":";
         text += showDigit ? Formatter::formatNumber(Formatter::getSecondsFromTime(this->countdownStartValueMs)) : "  ";
     }

@@ -4,9 +4,11 @@
 enum DeviceState {
     ready,
     settings,
-    editMinutes,
-    editSeconds,
-    editPomodoroTarget,
+    edit_timeMinutes,
+    edit_timeSeconds,
+    edit_pomodoroTarget,
+    settings_wifiCredentials,
+    settings_syncTimeViaNTP,
     counting,
     finish
 };

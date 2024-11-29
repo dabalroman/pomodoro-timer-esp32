@@ -4,13 +4,13 @@
 #include "DeviceState.h"
 #include "PreferencesManager.h"
 #include "Touch/TouchManager.h"
-#include "Views/EditTimerView.h"
+#include "Views/Settings/EditTimerView.h"
 #include "Views/FinishView.h"
 #include "Views/MainView.h"
 #include "Views/TimerView.h"
 #include "LEDManager/LEDManager.h"
 #include "Views/SettingsView.h"
-#include "Views/EditPomodoroTargetView.h"
+#include "Views/Settings/EditPomodoroTargetView.h"
 #include "ESPAsyncWebServer.h"
 #include "Fonts/FreeMonoBold18pt7b.h"
 #include <Adafruit_SSD1306.h>
@@ -114,11 +114,11 @@ void setup() {
 
 View *getCurrentView() {
     switch (deviceState) {
-        case DeviceState::editMinutes:
-        case DeviceState::editSeconds:
+        case DeviceState::edit_timeMinutes:
+        case DeviceState::edit_timeSeconds:
             return &editTimerView;
 
-        case DeviceState::editPomodoroTarget:
+        case DeviceState::edit_pomodoroTarget:
             return &editPomodoroTargetView;
 
         case DeviceState::settings:
