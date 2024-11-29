@@ -16,6 +16,7 @@ void SettingsView::handleInput() {
                 this->deviceState = DeviceState::ready;
                 break;
         }
+        this->touch.preventAccidentalActionFor();
     }
 
     if(this->touch.leftButton.takeActionIfPossible()) {

@@ -9,9 +9,11 @@ void EditTimerView::handleInput() {
     if (touch.selectButton.takeActionIfPossible()) {
         if (this->deviceState == DeviceState::editMinutes) {
             this->deviceState = DeviceState::editSeconds;
+            this->touch.preventAccidentalActionFor();
         } else if (this->deviceState == DeviceState::editSeconds) {
             this->preferencesManager.saveCountdownStartValueMs(this->countdownStartValueMs);
             this->deviceState = DeviceState::settings;
+            this->touch.preventAccidentalActionFor();
         }
     }
 

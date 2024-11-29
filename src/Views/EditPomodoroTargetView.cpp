@@ -6,16 +6,17 @@ void EditPomodoroTargetView::handleInput() {
         return;
     }
 
-    if (touch.selectButton.takeActionIfPossible()) {
+    if (this->touch.selectButton.takeActionIfPossible()) {
         this->preferencesManager.saveTargetPomodoroAmount(this->pomodoroTargetAmount);
         this->deviceState = DeviceState::settings;
+        this->touch.preventAccidentalActionFor();
     }
 
-    if (touch.rightButton.isTouched()) {
+    if (this->touch.rightButton.isTouched()) {
         this->pomodoroTargetAmount++;
     }
 
-    if (touch.leftButton.isTouched()) {
+    if (this->touch.leftButton.isTouched()) {
         this->pomodoroTargetAmount--;
     }
 

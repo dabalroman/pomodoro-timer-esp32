@@ -2,8 +2,9 @@
 #include <Fonts/FreeMonoBold18pt7b.h>
 
 void FinishView::handleInput() {
-    if (touch.selectButton.takeActionIfPossible()) {
+    if (this->touch.selectButton.takeActionIfPossible()) {
         this->deviceState = DeviceState::ready;
+        this->touch.preventAccidentalActionFor();
         this->pomodoroFinishedAmount++;
     }
 }

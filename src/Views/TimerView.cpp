@@ -8,6 +8,7 @@ ulong TimerView::getTimeLeftMs() const {
 void TimerView::handleInput() {
     if (this->touch.selectButton.takeActionIfPossible()) {
         this->isPaused = !this->isPaused;
+        this->touch.preventAccidentalActionFor();
 
         // Remember original countdown value, so pause feature does not affect future timers
         if (this->countdownStartValueMsBackup == 0) {
@@ -24,6 +25,7 @@ void TimerView::handleInput() {
 
     if (this->touch.leftButton.takeActionIfPossibleLongTouch()) {
         this->deviceState = DeviceState::ready;
+        this->touch.preventAccidentalActionFor();
         this->onExit();
     }
 }
